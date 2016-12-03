@@ -2,14 +2,11 @@ package testy;
 
 public class Testing {
     public static void beginTest(String name){
-        System.out.println("Testing " + name + ".");
-    }
-
-    public static void finishTest(){
-        System.out.println("Done with test.");
+        System.out.println("Testing " + name + ":");
     }
 
     public static void checkTrue(boolean test, String msg){
+        System.out.print("  ");
         if(test){
             System.out.print("Test ok.");
         } else{

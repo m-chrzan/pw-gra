@@ -17,8 +17,6 @@ public class PozycjaTests {
         Pozycja p2 = new Pozycja(12, 24);
         Testing.checkEqual(p2.wiersz(), 12, "Row set correctly");
         Testing.checkEqual(p2.kolumna(), 24, "Column set correctly");
-
-        Testing.finishTest();
     }
 
     public static void main(String[] args) {
