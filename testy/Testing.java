@@ -22,4 +22,8 @@ public class Testing {
     public static <T> void checkEqual(T t1, T t2, String msg) {
         checkTrue(t1.equals(t2), msg);
     }
+
+    public static <T> void checkNotEqual(T t1, T t2, String msg) {
+        checkFalse(t1.equals(t2), msg);
+    }
 }
