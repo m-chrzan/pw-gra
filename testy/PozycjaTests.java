@@ -54,9 +54,18 @@ public class PozycjaTests {
         Testing.checkFalse(p7.naPlanszy(), "(-3, -4) is not on the board");
     }
 
+    public static void testDajPozycjęZaPlanszą() {
+        beginTest("dajPozycjęZaPlanszą");
+
+        Pozycja p = Pozycja.dajPozycjęZaPlanszą();
+
+        Testing.checkFalse(p.naPlanszy(), "Position is off the board");
+    }
+
     public static void main(String[] args) {
         testGetters();
         testPrzesuń();
         testNaPlanszy();
+        testDajPozycjęZaPlanszą();
     }
 }
