@@ -8,8 +8,8 @@ public class PozycjaTests {
         Testing.beginTest("Pozycja." + name);
     }
 
-    public static void testConstructor() {
-        beginTest("Constructor");
+    public static void testGetters() {
+        beginTest("getters");
 
         Pozycja p1 = new Pozycja(4, 2);
         Testing.checkEqual(p1.wiersz(), 4, "Row set correctly");
@@ -35,7 +35,7 @@ public class PozycjaTests {
     }
 
     public static void main(String[] args) {
-        testConstructor();
+        testGetters();
         testPrzesuń();
     }
 }
