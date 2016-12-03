@@ -34,8 +34,29 @@ public class PozycjaTests {
                 "Move right increases column");
     }
 
+    public static void testNaPlanszy() {
+        beginTest("naPlanszy");
+
+        Pozycja p1 = new Pozycja(0, 0);
+        Pozycja p2 = new Pozycja(0, 2);
+        Pozycja p3 = new Pozycja(5, 0);
+        Pozycja p4 = new Pozycja(1, 2);
+        Pozycja p5 = new Pozycja(-1, 0);
+        Pozycja p6 = new Pozycja(0, -3);
+        Pozycja p7 = new Pozycja(-3, -4);
+
+        Testing.checkTrue(p1.naPlanszy(), "(0, 0) is on the board");
+        Testing.checkTrue(p2.naPlanszy(), "(0, 2) is on the board");
+        Testing.checkTrue(p3.naPlanszy(), "(5, 0) is on the board");
+        Testing.checkTrue(p4.naPlanszy(), "(1, 2) is on the board");
+        Testing.checkFalse(p5.naPlanszy(), "(-1, 0) is not on the board");
+        Testing.checkFalse(p6.naPlanszy(), "(0, -3) is not on the board");
+        Testing.checkFalse(p7.naPlanszy(), "(-3, -4) is not on the board");
+    }
+
     public static void main(String[] args) {
         testGetters();
         testPrzesuń();
+        testNaPlanszy();
     }
 }

@@ -42,4 +42,8 @@ public class Pozycja {
         Pozycja other = (Pozycja) otherObject;
         return this.wiersz == other.wiersz && this.kolumna == other.kolumna;
     }
+
+    public boolean naPlanszy() {
+        return wiersz >= 0 && kolumna >= 0;
+    }
 }
