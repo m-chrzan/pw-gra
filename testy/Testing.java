@@ -21,4 +21,8 @@ public class Testing {
     public static void checkFalse(boolean test, String msg){
         checkTrue(!test, msg);
     }
+
+    public static <T> void checkEqual(T t1, T t2, String msg) {
+        checkTrue(t1.equals(t2), msg);
+    }
 }
