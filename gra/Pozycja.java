@@ -1,6 +1,7 @@
 package gra;
 
 public class Pozycja {
+    private static final Pozycja pozycjaZaPlanszą = new Pozycja(-1, -1);
     private int wiersz;
     private int kolumna;
 
@@ -41,5 +42,13 @@ public class Pozycja {
     public boolean equals(Object otherObject) {
         Pozycja other = (Pozycja) otherObject;
         return this.wiersz == other.wiersz && this.kolumna == other.kolumna;
+    }
+
+    public boolean naPlanszy() {
+        return wiersz >= 0 && kolumna >= 0;
+    }
+
+    public static Pozycja dajPozycjęZaPlanszą() {
+        return pozycjaZaPlanszą;
     }
 }
