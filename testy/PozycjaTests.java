@@ -4,7 +4,7 @@ import gra.Pozycja;
 
 public class PozycjaTests {
     private static void beginTest(String name) {
-        Testing.beginTest("PozycjaTest." + name);
+        Testing.beginTest("Pozycja." + name);
     }
 
     public static void testConstructor() {
