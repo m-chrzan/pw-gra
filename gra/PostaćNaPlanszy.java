@@ -15,6 +15,10 @@ public class PostaćNaPlanszy {
         chcianaPozycja = pozycja;
     }
 
+    public void chcianyKierunek(Kierunek kierunek) {
+        chcianaPozycja = pozycja.przesuń(kierunek);
+    }
+
     public void przesuń() {
         pozycja = chcianaPozycja;
         chcianaPozycja = Pozycja.dajPozycjęZaPlanszą();
@@ -33,6 +37,24 @@ public class PostaćNaPlanszy {
                    this.chcianyPrawyDolny().kolumna() >= postać.lewyGórny().kolumna() &&
                    postać.prawyDolny().kolumna() >= this.chcianyLewyGórny().kolumna();
         }
+    }
+
+    /* Odpowiada na pytanie: czy [postać] chce się przesunąć i blokuje [this]
+     * teraz oraz blokowałaby po przesunięciu?
+     */
+    public boolean blokujeszIBędzieszMnieBlokował(PostaćNaPlanszy postać) {
+        boolean będzieszBlokował = false;
+        if (postać.chcianaPozycja.equals(Pozycja.dajPozycjęZaPlanszą())) {
+            będzieszBlokował = false;
+        } else {
+            będzieszBlokował =
+                this.chcianyPrawyDolny().wiersz() >= postać.chcianyLewyGórny().wiersz() &&
+                postać.chcianyPrawyDolny().wiersz() >= this.chcianyLewyGórny().wiersz() &&
+                this.chcianyPrawyDolny().kolumna() >= postać.chcianyLewyGórny().kolumna() &&
+                postać.chcianyPrawyDolny().kolumna() >= this.chcianyLewyGórny().kolumna();
+        }
+
+        return blokujeszMnie(postać) && będzieszBlokował;
     }
 
     public Postać dajPostać() {
