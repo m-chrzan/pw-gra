@@ -9,5 +9,5 @@ the board.
 
 Unit tests for each helper object are found in `testy/<object name>Tests.java`.
 
-Extended functional of the full `MojaPlansza` implementation can be found in
-`testy/Testy.java`.
+Extended functional tests of the full `MojaPlansza` implementation can be found
+in `testy/Testy.java`.
