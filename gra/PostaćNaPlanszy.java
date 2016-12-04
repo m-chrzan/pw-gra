@@ -25,25 +25,27 @@ public class PostaćNaPlanszy {
     }
 
     public boolean zawiera(Pozycja pozycja) {
-        return pozycja.wiersz() >= górnaGranica() &&
-               pozycja.wiersz() <= dolnaGranica() &&
-               pozycja.kolumna() >= lewaGranica() &&
-               pozycja.kolumna() <= prawaGranica();
+        return pozycja.wiersz() >= lewyGórny().wiersz() &&
+               pozycja.wiersz() <= prawyDolny().wiersz() &&
+               pozycja.kolumna() >= lewyGórny().kolumna() &&
+               pozycja.kolumna() <= prawyDolny().kolumna();
     }
 
-    private int górnaGranica() {
-        return pozycja.wiersz();
+    private Pozycja lewyGórny() {
+        return pozycja;
     }
 
-    private int lewaGranica() {
-        return pozycja.kolumna();
+    private Pozycja prawyDolny() {
+        return new Pozycja(pozycja.wiersz() + postać.dajWysokość() - 1,
+                           pozycja.kolumna() + postać.dajSzerokość() - 1);
     }
 
-    private int dolnaGranica() {
-        return pozycja.wiersz() + postać.dajWysokość() - 1;
+    private Pozycja chcianyLewyGórny() {
+        return chcianaPozycja;
     }
 
-    private int prawaGranica() {
-        return pozycja.kolumna() + postać.dajSzerokość() - 1;
+    private Pozycja chcianyPrawyDolny() {
+        return new Pozycja(chcianaPozycja.wiersz() + postać.dajWysokość(),
+                           chcianaPozycja.kolumna() + postać.dajSzerokość());
     }
 }
