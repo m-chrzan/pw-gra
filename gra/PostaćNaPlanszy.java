@@ -20,6 +20,21 @@ public class PostaćNaPlanszy {
         chcianaPozycja = Pozycja.dajPozycjęZaPlanszą();
     }
 
+    /* Odpowiada na pytanie: czy [postać] blokuje powierzchnię, która jest
+     * chciana przez [this]?
+     */
+    public boolean blokujeszMnie(PostaćNaPlanszy postać) {
+        if (chcianaPozycja.equals(Pozycja.dajPozycjęZaPlanszą()) ||
+            postać.pozycja.equals(Pozycja.dajPozycjęZaPlanszą())) {
+            return false;
+        } else {
+            return this.chcianyPrawyDolny().wiersz() >= postać.lewyGórny().wiersz() &&
+                   postać.prawyDolny().wiersz() >= this.chcianyLewyGórny().wiersz() &&
+                   this.chcianyPrawyDolny().kolumna() >= postać.lewyGórny().kolumna() &&
+                   postać.prawyDolny().kolumna() >= this.chcianyLewyGórny().kolumna();
+        }
+    }
+
     public Postać dajPostać() {
         return postać;
     }
@@ -45,7 +60,7 @@ public class PostaćNaPlanszy {
     }
 
     private Pozycja chcianyPrawyDolny() {
-        return new Pozycja(chcianaPozycja.wiersz() + postać.dajWysokość(),
-                           chcianaPozycja.kolumna() + postać.dajSzerokość());
+        return new Pozycja(chcianaPozycja.wiersz() + postać.dajWysokość() - 1,
+                           chcianaPozycja.kolumna() + postać.dajSzerokość() - 1);
     }
 }

@@ -69,9 +69,72 @@ public class PostaćNaPlanszyTests {
                 "Postać doesn't contain the squares to its right");
     }
 
+    public static void testBlokujeszMnie() {
+        beginTest("blokujeszMnie");
+
+        PostaćNaPlanszy postać1 = new PostaćNaPlanszy(new ProstaPostać(4, 2));
+        postać1.chcianaPozycja(new Pozycja(2, 2));
+        postać1.przesuń();
+
+        PostaćNaPlanszy postać2 = new PostaćNaPlanszy(new ProstaPostać(2, 2));
+
+        postać2.chcianaPozycja(new Pozycja(0, 0));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can have neighboring corners");
+
+        postać2.chcianaPozycja(new Pozycja(0, 4));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can have neighboring corners");
+
+        postać2.chcianaPozycja(new Pozycja(0, 2));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can have a neighboring edge");
+
+        postać2.chcianaPozycja(new Pozycja(2, 0));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can have a neighboring edge");
+
+        postać2.chcianaPozycja(new Pozycja(3, 4));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can have a neighboring edge");
+
+        postać2.chcianaPozycja(new Pozycja(100, 24));
+        Testing.checkFalse(postać2.blokujeszMnie(postać1),
+                "Two Postać objects can be far from each other");
+
+        postać2.chcianaPozycja(new Pozycja(1, 1));
+        Testing.checkTrue(postać2.blokujeszMnie(postać1),
+                "Corners of Postać objects can't intersect");
+
+        postać2.chcianaPozycja(new Pozycja(5, 3));
+        Testing.checkTrue(postać2.blokujeszMnie(postać1),
+                "Corners of Postać objects can't intersect");
+
+        postać2.chcianaPozycja(new Pozycja(1, 2));
+        Testing.checkTrue(postać2.blokujeszMnie(postać1),
+                "Postać objects can't partially intersect");
+
+        postać2.chcianaPozycja(new Pozycja(3, 2));
+        Testing.checkTrue(postać2.blokujeszMnie(postać1),
+                "One Postać can't be entirely on top of another");
+
+        PostaćNaPlanszy postać3 = new PostaćNaPlanszy(new ProstaPostać(6, 5));
+        postać3.chcianaPozycja(new Pozycja(0, 0));
+        Testing.checkTrue(postać3.blokujeszMnie(postać1),
+                "Postać can't contain another Postać");
+
+        Testing.checkFalse(postać2.blokujeszMnie(postać3),
+                "A Postać that's not on the board doesn't block anyone");
+
+        postać3.przesuń();
+        Testing.checkFalse(postać1.blokujeszMnie(postać3),
+                "A Postać that doesn't want to move is not blocked by anyone");
+    }
+
     public static void main(String[] args) {
         testDajPostać();
         testZawiera();
+        testBlokujeszMnie();
     }
 
 }
