@@ -61,32 +61,6 @@ public class ProstaPlanszaTests {
         Testing.checkTrue(allSpecificPostać, msg);
     }
 
-    public static void checkExceptionThrown(Runnable runnable, String msg) {
-        boolean thrown = false;
-        try {
-            runnable.run();
-        } catch (Exception e) {
-            thrown = true;
-        }
-
-        Testing.checkTrue(thrown, msg);
-    }
-
-    public static <T extends Throwable> void checkExceptionThrown(
-            Runnable runnable, T exception, String msg) {
-        boolean thrown = false;
-        try {
-            runnable.run();
-        } catch (Exception e) {
-            if (exception.getClass().isInstance(e)) {
-                thrown = true;
-            }
-        }
-
-        Testing.checkTrue(thrown, msg);
-    }
-
-
     public static void testChęćPostawienia() {
         beginTest("chęćPostawienia");
 
@@ -112,7 +86,7 @@ public class ProstaPlanszaTests {
         checkEmpty(plansza, 0, 3, 4, 2, "Rest of the board still empty (2/3)");
         checkEmpty(plansza, 4, 4, 1, 1, "Rest of the board still empty (3/3)");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, -1, 0);
@@ -120,7 +94,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać row has to be positive");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 0, -1);
@@ -128,7 +102,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać column has to be positive");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 5, 0);
@@ -136,7 +110,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać row has to fit on the board");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 0, 5);
@@ -144,7 +118,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać column has to fit on the board");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 3, 3);
@@ -152,7 +126,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać lower right corner has to fit on the board");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 0, 3);
@@ -160,7 +134,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać right edge has to fit on the board");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 3, 0);
@@ -168,7 +142,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać lower edge has to fit on the board");
 
-        checkExceptionThrown(new Runnable() {
+        Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 ProstaPostać postać = new ProstaPostać(3, 3);
                 plansza.chęćPostawienia(postać, 100, 200);
