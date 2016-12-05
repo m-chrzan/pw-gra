@@ -197,19 +197,20 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Can't move Postać left off the board");
 
-        plansza.chęćPostawienia(postać1, 3, 3);
-        plansza.przesuńNaChcianąPozycję(postać1);
+        ProstaPostać postać2 = new ProstaPostać(2, 2);
+        plansza.chęćPostawienia(postać2, 3, 3);
+        plansza.przesuńNaChcianąPozycję(postać2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
-                plansza.chęćPrzesunięcia(postać1, Kierunek.DÓŁ);
+                plansza.chęćPrzesunięcia(postać2, Kierunek.DÓŁ);
             }
         }, new IllegalArgumentException(),
         "Can't move Postać down off the board");
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
-                plansza.chęćPrzesunięcia(postać1, Kierunek.PRAWO);
+                plansza.chęćPrzesunięcia(postać2, Kierunek.PRAWO);
             }
         }, new IllegalArgumentException(),
         "Can't move Postać right off the board");
