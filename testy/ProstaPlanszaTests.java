@@ -3,6 +3,7 @@ package testy;
 import gra.ProstaPlansza;
 import gra.Postać;
 import gra.Akcja;
+import gra.Kierunek;
 import sample.ProstaPostać;
 import sample.Finder;
 import sample.SpecificFinder;
@@ -151,7 +152,78 @@ public class ProstaPlanszaTests {
         "Postać has to be on the board");
     }
 
+    public static void testChęćPrzesunięcia() {
+        beginTest("chęćPrzesunięcia");
+
+        ProstaPlansza plansza = new ProstaPlansza(5, 5);
+        ProstaPostać postać1 = new ProstaPostać(2, 2);
+
+        plansza.chęćPostawienia(postać1, 1, 1);
+        plansza.przesuńNaChcianąPozycję(postać1);
+
+        plansza.chęćPrzesunięcia(postać1, Kierunek.GÓRA);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        checkIsSpecificPostać(plansza, postać1, 0, 1, 2, 2,
+                "Moved Postać up");
+
+        plansza.chęćPrzesunięcia(postać1, Kierunek.LEWO);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+                "Moved Postać left");
+
+        plansza.chęćPrzesunięcia(postać1, Kierunek.DÓŁ);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        checkIsSpecificPostać(plansza, postać1, 1, 0, 2, 2,
+                "Moved Postać down");
+
+        plansza.chęćPrzesunięcia(postać1, Kierunek.PRAWO);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        checkIsSpecificPostać(plansza, postać1, 1, 1, 2, 2,
+                "Moved Postać right");
+
+        plansza.chęćPostawienia(postać1, 0, 0);
+        plansza.przesuńNaChcianąPozycję(postać1);
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.chęćPrzesunięcia(postać1, Kierunek.GÓRA);
+            }
+        }, new IllegalArgumentException(), "Can't move Postać up off the board");
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.chęćPrzesunięcia(postać1, Kierunek.LEWO);
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać left off the board");
+
+        plansza.chęćPostawienia(postać1, 3, 3);
+        plansza.przesuńNaChcianąPozycję(postać1);
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.chęćPrzesunięcia(postać1, Kierunek.DÓŁ);
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać down off the board");
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.chęćPrzesunięcia(postać1, Kierunek.PRAWO);
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać right off the board");
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.chęćPrzesunięcia(new ProstaPostać(1, 1), Kierunek.DÓŁ);
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać that isn't on the board");
+    }
+
     public static void main(String[] args) {
         testChęćPostawienia();
+        testChęćPrzesunięcia();
     }
 }

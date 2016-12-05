@@ -15,14 +15,34 @@ public class ProstaPlansza {
     }
 
     public void chęćPostawienia(Postać postać, int wiersz, int kolumna) {
-        if (wiersz < 0 || kolumna < 0 ||
-            wiersz + postać.dajWysokość() > wysokość ||
-            kolumna + postać.dajSzerokość() > szerokość) {
-            throw new IllegalArgumentException();
-        }
         PostaćNaPlanszy postaćNaPlanszy = new PostaćNaPlanszy(postać);
         postaćNaPlanszy.chcianaPozycja(new Pozycja(wiersz, kolumna));
+        if (!zmieściSięNaPlanszy(postaćNaPlanszy)) {
+            throw new IllegalArgumentException();
+        }
         postacie.add(postaćNaPlanszy);
+    }
+
+    private boolean zmieściSięNaPlanszy(PostaćNaPlanszy postać) {
+        return pozycjaNaPlanszy(postać.chcianyLewyGórny()) &&
+               pozycjaNaPlanszy(postać.chcianyPrawyDolny());
+    }
+
+    private boolean pozycjaNaPlanszy(Pozycja pozycja) {
+        return pozycja.wiersz() >= 0 && pozycja.wiersz() < wysokość &&
+               pozycja.kolumna() >= 0 && pozycja.kolumna() < szerokość;
+    }
+
+    public void chęćPrzesunięcia(Postać postać, Kierunek kierunek) {
+        try {
+            PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
+            postaćNaPlanszy.chcianyKierunek(kierunek);
+            if (!zmieściSięNaPlanszy(postaćNaPlanszy)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (NieZnalezionoPostaci np) {
+            throw new IllegalArgumentException();
+        }
     }
 
     public void przesuńNaChcianąPozycję(Postać postać) {

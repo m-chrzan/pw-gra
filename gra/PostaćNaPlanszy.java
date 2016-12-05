@@ -68,20 +68,20 @@ public class PostaćNaPlanszy {
                pozycja.kolumna() <= prawyDolny().kolumna();
     }
 
-    private Pozycja lewyGórny() {
+    public Pozycja lewyGórny() {
         return pozycja;
     }
 
-    private Pozycja prawyDolny() {
+    public Pozycja prawyDolny() {
         return new Pozycja(pozycja.wiersz() + postać.dajWysokość() - 1,
                            pozycja.kolumna() + postać.dajSzerokość() - 1);
     }
 
-    private Pozycja chcianyLewyGórny() {
+    public Pozycja chcianyLewyGórny() {
         return chcianaPozycja;
     }
 
-    private Pozycja chcianyPrawyDolny() {
+    public Pozycja chcianyPrawyDolny() {
         return new Pozycja(chcianaPozycja.wiersz() + postać.dajWysokość() - 1,
                            chcianaPozycja.kolumna() + postać.dajSzerokość() - 1);
     }
