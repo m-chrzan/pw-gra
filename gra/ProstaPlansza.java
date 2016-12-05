@@ -15,6 +15,11 @@ public class ProstaPlansza {
     }
 
     public void chęćPostawienia(Postać postać, int wiersz, int kolumna) {
+        if (wiersz < 0 || kolumna < 0 ||
+            wiersz + postać.dajWysokość() > wysokość ||
+            kolumna + postać.dajSzerokość() > szerokość) {
+            throw new IllegalArgumentException();
+        }
         PostaćNaPlanszy postaćNaPlanszy = new PostaćNaPlanszy(postać);
         postaćNaPlanszy.chcianaPozycja(new Pozycja(wiersz, kolumna));
         postacie.add(postaćNaPlanszy);
