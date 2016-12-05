@@ -223,8 +223,67 @@ public class ProstaPlanszaTests {
         "Can't move Postać that isn't on the board");
     }
 
+    public static void testJestBlokowany() {
+        beginTest("jestBlokowany");
+
+        ProstaPlansza plansza = new ProstaPlansza(5, 6);
+
+        ProstaPostać postać1 = new ProstaPostać(2, 3);
+        ProstaPostać postać2 = new ProstaPostać(3, 2);
+
+        plansza.chęćPostawienia(postać1, 2, 1);
+        plansza.przesuńNaChcianąPozycję(postać1);
+
+        Testing.checkFalse(plansza.jestBlokowany(postać1),
+                "Postać not wanting to move is not blocked");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 2, 1);
+        Testing.checkTrue(plansza.jestBlokowany(postać2),
+                "Can't have two Postać objects in the same place");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 0, 0);
+        Testing.checkTrue(plansza.jestBlokowany(postać2),
+                "Two Postać objects can't share a corner");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 1, 1);
+        Testing.checkTrue(plansza.jestBlokowany(postać2),
+                "Two Postać objects can't run into each other");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 1, 3);
+        Testing.checkTrue(plansza.jestBlokowany(postać2),
+                "Two Postać objects can't run into each other");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 0, 4);
+        Testing.checkFalse(plansza.jestBlokowany(postać2),
+                "Two Postać objects can stand next to each other");
+
+        postać2 = new ProstaPostać(3, 2);
+        plansza.chęćPostawienia(postać2, 2, 4);
+        Testing.checkFalse(plansza.jestBlokowany(postać2),
+                "Two Postać objects can stand next to each other");
+
+        ProstaPlansza plansza2 = new ProstaPlansza(6, 5);
+        ProstaPostać postać3 = new ProstaPostać(1, 1);
+        ProstaPostać postać4 = new ProstaPostać(3, 3);
+        plansza2.chęćPostawienia(postać4, 0, 0);
+        plansza2.chęćPostawienia(postać3, 1, 1);
+        Testing.checkFalse(plansza2.jestBlokowany(postać4),
+                "Postać not blocked while board empty");
+        Testing.checkFalse(plansza2.jestBlokowany(postać3),
+                "Postać not blocked while board empty");
+        plansza2.przesuńNaChcianąPozycję(postać3);
+        Testing.checkTrue(plansza2.jestBlokowany(postać4),
+                "Single square inside Postać blocks it");
+    }
+
     public static void main(String[] args) {
         testChęćPostawienia();
         testChęćPrzesunięcia();
+        testJestBlokowany();
     }
 }

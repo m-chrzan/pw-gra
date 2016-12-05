@@ -74,6 +74,22 @@ public class ProstaPlansza {
         throw new NieZnalezionoPostaci();
     }
 
+    public boolean jestBlokowany(Postać postać) {
+        try {
+            PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
+            for (PostaćNaPlanszy innaPostać : postacie) {
+                if (!postaćNaPlanszy.equals(innaPostać) &&
+                    postaćNaPlanszy.blokujeszMnie(innaPostać)) {
+                    return true;
+                }
+            }
+
+            return false;
+        } catch (NieZnalezionoPostaci np) {
+            return false;
+        }
+    }
+
     public void sprawdź(int wiersz, int kolumna, Akcja jeśliZajęte,
             Runnable jeśliWolne) {
         try {
