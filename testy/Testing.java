@@ -26,4 +26,29 @@ public class Testing {
     public static <T> void checkNotEqual(T t1, T t2, String msg) {
         checkFalse(t1.equals(t2), msg);
     }
+
+    public static void checkExceptionThrown(Runnable runnable, String msg) {
+        boolean thrown = false;
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            thrown = true;
+        }
+
+        Testing.checkTrue(thrown, msg);
+    }
+
+    public static <T extends Throwable> void checkExceptionThrown(
+            Runnable runnable, T exception, String msg) {
+        boolean thrown = false;
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            if (exception.getClass().isInstance(e)) {
+                thrown = true;
+            }
+        }
+
+        Testing.checkTrue(thrown, msg);
+    }
 }

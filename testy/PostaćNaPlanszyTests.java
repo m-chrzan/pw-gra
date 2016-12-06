@@ -131,71 +131,10 @@ public class PostaćNaPlanszyTests {
         Testing.checkFalse(postać1.blokujeszMnie(postać3),
                 "A Postać that doesn't want to move is not blocked by anyone");
     }
-
-    public static void testBlokujeszIBędzieszMnieBlokował() {
-        beginTest("blokujeszIBędzieszMnieBlokował");
-
-        PostaćNaPlanszy postać1 = new PostaćNaPlanszy(new ProstaPostać(2, 2));
-        postać1.chcianaPozycja(new Pozycja(1, 1));
-        postać1.przesuń();
-
-        PostaćNaPlanszy postać2 = new PostaćNaPlanszy(new ProstaPostać(2, 2));
-        postać2.chcianaPozycja(new Pozycja(1, 1));
-
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać not on the board yet won't be blocking anyone");
-        Testing.checkFalse(postać2.blokujeszIBędzieszMnieBlokował(postać1),
-                "Postać not on the board yet won't be blocked by anyone");
-
-        postać2.chcianaPozycja(new Pozycja(1, 3));
-        postać2.przesuń();
-
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać objects not wanting to move won't block each other");
-        Testing.checkFalse(postać2.blokujeszIBędzieszMnieBlokował(postać1),
-                "Postać objects not wanting to move won't block each other");
-
-        postać1.chcianyKierunek(Kierunek.PRAWO);
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać not wanting to move is not considered to be blocking after its potential move");
-        Testing.checkFalse(postać2.blokujeszIBędzieszMnieBlokował(postać1),
-                "Postać not wanting to move is not considered to have its potential move blocked by anyone");
-
-        postać2.chcianyKierunek(Kierunek.PRAWO);
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać objects wanting to move in the same direction won't be blocking each other");
-
-        postać2.chcianyKierunek(Kierunek.LEWO);
-        Testing.checkTrue(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać objects trying to move into each other's space will be blocking each other");
-
-        Testing.checkTrue(postać2.blokujeszIBędzieszMnieBlokował(postać1),
-                "Postać objects trying to move into each other's space will be blocking each other");
-
-        postać1.chcianyKierunek(Kierunek.LEWO);
-        postać2.chcianyKierunek(Kierunek.PRAWO);
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać objects moving away from each other won't be blocking each other.");
-        Testing.checkFalse(postać2.blokujeszIBędzieszMnieBlokował(postać1),
-                "Postać objects moving away from each other won't be blocking each other.");
-
-        postać2.chcianaPozycja(new Pozycja(3, 2));
-        postać2.przesuń();
-        postać2.chcianyKierunek(Kierunek.PRAWO);
-        postać1.chcianyKierunek(Kierunek.DÓŁ);
-        Testing.checkFalse(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać that will move out of another's way won't be blocking it");
-
-        postać2.chcianyKierunek(Kierunek.LEWO);
-        Testing.checkTrue(postać1.blokujeszIBędzieszMnieBlokował(postać2),
-                "Postać that stays in another's way keeps blocking it");
-    }
-
     public static void main(String[] args) {
         testDajPostać();
         testZawiera();
         testBlokujeszMnie();
-        testBlokujeszIBędzieszMnieBlokował();
     }
 
 }

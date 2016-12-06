@@ -39,24 +39,6 @@ public class PostaćNaPlanszy {
         }
     }
 
-    /* Odpowiada na pytanie: czy [postać] chce się przesunąć i blokuje [this]
-     * teraz oraz blokowałaby po przesunięciu?
-     */
-    public boolean blokujeszIBędzieszMnieBlokował(PostaćNaPlanszy postać) {
-        boolean będzieszBlokował = false;
-        if (postać.chcianaPozycja.equals(Pozycja.dajPozycjęZaPlanszą())) {
-            będzieszBlokował = false;
-        } else {
-            będzieszBlokował =
-                this.chcianyPrawyDolny().wiersz() >= postać.chcianyLewyGórny().wiersz() &&
-                postać.chcianyPrawyDolny().wiersz() >= this.chcianyLewyGórny().wiersz() &&
-                this.chcianyPrawyDolny().kolumna() >= postać.chcianyLewyGórny().kolumna() &&
-                postać.chcianyPrawyDolny().kolumna() >= this.chcianyLewyGórny().kolumna();
-        }
-
-        return blokujeszMnie(postać) && będzieszBlokował;
-    }
-
     public Postać dajPostać() {
         return postać;
     }
@@ -68,20 +50,20 @@ public class PostaćNaPlanszy {
                pozycja.kolumna() <= prawyDolny().kolumna();
     }
 
-    private Pozycja lewyGórny() {
+    public Pozycja lewyGórny() {
         return pozycja;
     }
 
-    private Pozycja prawyDolny() {
+    public Pozycja prawyDolny() {
         return new Pozycja(pozycja.wiersz() + postać.dajWysokość() - 1,
                            pozycja.kolumna() + postać.dajSzerokość() - 1);
     }
 
-    private Pozycja chcianyLewyGórny() {
+    public Pozycja chcianyLewyGórny() {
         return chcianaPozycja;
     }
 
-    private Pozycja chcianyPrawyDolny() {
+    public Pozycja chcianyPrawyDolny() {
         return new Pozycja(chcianaPozycja.wiersz() + postać.dajWysokość() - 1,
                            chcianaPozycja.kolumna() + postać.dajSzerokość() - 1);
     }
