@@ -299,7 +299,7 @@ public class ProstaPlanszaTests {
 
         for (Postać postać : postacie) {
             plansza.przesuńNaChcianąPozycję(postać);
-            Testing.checkFalse(plansza.tworzyCykl(postać), 
+            Testing.checkFalse(plansza.tworzyCykl(postać),
                     "Before movement, no Postać is in a cycle");
         }
 
@@ -336,10 +336,50 @@ public class ProstaPlanszaTests {
         Testing.checkTrue(plansza.tworzyCykl(postać2), "Cycle created");
     }
 
+    public static void testUsuń() {
+        beginTest("usuń");
+
+        ProstaPlansza plansza = new ProstaPlansza(5, 6);
+
+        Postać postać1 = new ProstaPostać(2, 3);
+        Postać postać2 = new ProstaPostać(2, 1);
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.usuń(postać1);
+            }
+        }, new IllegalArgumentException(),
+        "Can't remove Postać that's on the board");
+
+        plansza.chęćPostawienia(postać1, 0, 0);
+        plansza.chęćPostawienia(postać2, 3, 5);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        plansza.przesuńNaChcianąPozycję(postać2);
+
+        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 3,
+                "Postać is on board");
+        checkIsSpecificPostać(plansza, postać2, 3, 5, 2, 1,
+                "Postać is on board");
+
+        plansza.usuń(postać1);
+
+        checkEmpty(plansza, 0, 0, 2, 3, "Removed Postać no longer on board");
+        checkIsSpecificPostać(plansza, postać2, 3, 5, 2, 1,
+                "Other Postać still on board");
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.usuń(postać1);
+            }
+        }, new IllegalArgumentException(),
+        "Can't remove Postać that's on the board");
+    }
+
     public static void main(String[] args) {
         testChęćPostawienia();
         testChęćPrzesunięcia();
         testJestBlokowany();
         testTworzyCykl();
+        testUsuń();
     }
 }

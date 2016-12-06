@@ -153,6 +153,15 @@ public class ProstaPlansza {
         }
     }
 
+    public void usuń(Postać postać) {
+        try {
+            PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
+            postacie.remove(postaćNaPlanszy);
+        } catch (NieZnalezionoPostaci np) {
+            throw new IllegalArgumentException();
+        }
+    }
+
     public void sprawdź(int wiersz, int kolumna, Akcja jeśliZajęte,
             Runnable jeśliWolne) {
         try {
