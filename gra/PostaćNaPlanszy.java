@@ -39,24 +39,6 @@ public class PostaćNaPlanszy {
         }
     }
 
-    /* Odpowiada na pytanie: czy [postać] chce się przesunąć i blokuje [this]
-     * teraz oraz blokowałaby po przesunięciu?
-     */
-    public boolean blokujeszIBędzieszMnieBlokował(PostaćNaPlanszy postać) {
-        boolean będzieszBlokował = false;
-        if (postać.chcianaPozycja.equals(Pozycja.dajPozycjęZaPlanszą())) {
-            będzieszBlokował = false;
-        } else {
-            będzieszBlokował =
-                this.chcianyPrawyDolny().wiersz() >= postać.chcianyLewyGórny().wiersz() &&
-                postać.chcianyPrawyDolny().wiersz() >= this.chcianyLewyGórny().wiersz() &&
-                this.chcianyPrawyDolny().kolumna() >= postać.chcianyLewyGórny().kolumna() &&
-                postać.chcianyPrawyDolny().kolumna() >= this.chcianyLewyGórny().kolumna();
-        }
-
-        return blokujeszMnie(postać) && będzieszBlokował;
-    }
-
     public Postać dajPostać() {
         return postać;
     }
