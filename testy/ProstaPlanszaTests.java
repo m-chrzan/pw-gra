@@ -281,9 +281,65 @@ public class ProstaPlanszaTests {
                 "Single square inside Postać blocks it");
     }
 
+    public static void testTworzyCykl() {
+        beginTest("tworzyCykl");
+
+        ProstaPlansza plansza = new ProstaPlansza(6, 6);
+        ProstaPostać[] postacie = new ProstaPostać[5];
+
+        for (int i = 0; i < 5; i++) {
+            postacie[i] = new ProstaPostać(2, 2);
+        }
+
+        plansza.chęćPostawienia(postacie[0], 0, 0);
+        plansza.chęćPostawienia(postacie[1], 0, 2);
+        plansza.chęćPostawienia(postacie[2], 2, 0);
+        plansza.chęćPostawienia(postacie[3], 2, 2);
+        plansza.chęćPostawienia(postacie[4], 4, 4);
+
+        for (Postać postać : postacie) {
+            plansza.przesuńNaChcianąPozycję(postać);
+            Testing.checkFalse(plansza.tworzyCykl(postać), 
+                    "Before movement, no Postać is in a cycle");
+        }
+
+        plansza.chęćPrzesunięcia(postacie[0], Kierunek.PRAWO);
+        plansza.chęćPrzesunięcia(postacie[1], Kierunek.DÓŁ);
+        plansza.chęćPrzesunięcia(postacie[2], Kierunek.GÓRA);
+        Testing.checkFalse(plansza.tworzyCykl(postacie[0]),
+                "Postać still not in cycle");
+        Testing.checkFalse(plansza.tworzyCykl(postacie[3]),
+                "Postać still not in cycle");
+        plansza.chęćPrzesunięcia(postacie[3], Kierunek.LEWO);
+        for (int i = 0; i < 4; i++) {
+            Testing.checkTrue(plansza.tworzyCykl(postacie[i]),
+                    "Postać is in cycle");
+        }
+        Testing.checkFalse(plansza.tworzyCykl(postacie[4]),
+                    "Postać is outside of cycle");
+
+        plansza = new ProstaPlansza(2, 1);
+        Postać postać1 = new ProstaPostać(1, 1);
+        Postać postać2 = new ProstaPostać(1, 1);
+
+        plansza.chęćPostawienia(postać1, 0, 0);
+        plansza.chęćPostawienia(postać2, 1, 0);
+        plansza.przesuńNaChcianąPozycję(postać1);
+        plansza.przesuńNaChcianąPozycję(postać2);
+        plansza.chęćPrzesunięcia(postać1, Kierunek.DÓŁ);
+
+        Testing.checkFalse(plansza.tworzyCykl(postać1), "No cycle yet");
+        Testing.checkFalse(plansza.tworzyCykl(postać2), "No cycle yet");
+
+        plansza.chęćPrzesunięcia(postać2, Kierunek.GÓRA);
+        Testing.checkTrue(plansza.tworzyCykl(postać1), "Cycle created");
+        Testing.checkTrue(plansza.tworzyCykl(postać2), "Cycle created");
+    }
+
     public static void main(String[] args) {
         testChęćPostawienia();
         testChęćPrzesunięcia();
         testJestBlokowany();
+        testTworzyCykl();
     }
 }

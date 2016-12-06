@@ -2,6 +2,9 @@ package gra;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Stack;
+import java.util.Map;
+import java.util.HashMap;
 
 public class ProstaPlansza {
     private List<PostaćNaPlanszy> postacie;
@@ -86,6 +89,66 @@ public class ProstaPlansza {
 
             return false;
         } catch (NieZnalezionoPostaci np) {
+            return false;
+        }
+    }
+
+    public boolean tworzyCykl(Postać postać) {
+        try {
+            PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
+            return sprawdźCzyRozpoczynaCykl(postaćNaPlanszy);
+        } catch (NieZnalezionoPostaci np) {
+            return false;
+        }
+    }
+
+    private boolean sprawdźCzyRozpoczynaCykl(PostaćNaPlanszy źródło) {
+        Stack<PostaćNaPlanszy> stos = new Stack<PostaćNaPlanszy>();
+        Map<PostaćNaPlanszy, Boolean> odwiedzone =
+            new HashMap<PostaćNaPlanszy, Boolean>();
+
+        for (PostaćNaPlanszy postać : postacie) {
+            odwiedzone.put(postać, false);
+        }
+
+        dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, źródło);
+        return jestCyklDoŹródła(stos, odwiedzone, źródło);
+    }
+
+    private boolean jestCyklDoŹródła(Stack<PostaćNaPlanszy> stos,
+            Map<PostaćNaPlanszy, Boolean> odwiedzone,
+            PostaćNaPlanszy źródło) {
+        if (stos.empty()) {
+            return false;
+        }
+
+        PostaćNaPlanszy aktualny = stos.pop();
+        odwiedzone.put(aktualny, true);
+
+        if (aktualny.equals(źródło)) {
+            return true;
+        } else {
+            dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, aktualny);
+            return jestCyklDoŹródła(stos, odwiedzone, źródło);
+        }
+    }
+
+    private void dodajNieodwiedzonychSąsiadówNaStos(Stack<PostaćNaPlanszy> stos,
+            Map<PostaćNaPlanszy, Boolean> odwiedzone, PostaćNaPlanszy aktualny) {
+        for (PostaćNaPlanszy postać : postacie) {
+            if (!odwiedzone.get(postać) && krawędźMiędzy(aktualny, postać)) {
+                stos.push(postać);
+            }
+        }
+    }
+
+    private boolean krawędźMiędzy(PostaćNaPlanszy postać1,
+            PostaćNaPlanszy postać2) {
+        if (postać1.equals(postać2)) {
+            return false;
+        } else if (postać1.blokujeszMnie(postać2)) {
+            return true;
+        } else {
             return false;
         }
     }
