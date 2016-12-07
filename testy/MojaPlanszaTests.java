@@ -155,6 +155,35 @@ public class MojaPlanszaTests {
 
     public static void testUsuń() {
         beginTest("usuń");
+        Plansza plansza = new MojaPlansza(5, 6);
+
+        Postać postać1 = new ProstaPostać(2, 2);
+        Postać postać2 = new ProstaPostać(2, 2);
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                plansza.usuń(postać1);
+            }
+        }, new IllegalArgumentException(),
+        "Can't remove Postać that's not on board");
+
+        try {
+            plansza.postaw(postać1, 0, 0);
+            plansza.postaw(postać2, 2, 0);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+                "First Postać is on board");
+        checkIsSpecificPostać(plansza, postać2, 2, 0, 2, 2,
+                "Second Postać is on board");
+
+        plansza.usuń(postać2);
+
+        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+                "Original Postać still on board");
+        checkEmpty(plansza, 2, 0, 3, 6, "Rest of board empty (1/2)");
+        checkEmpty(plansza, 0, 2, 2, 4, "Rest of board empty (2/2)");
     }
 
     public static void testSprawdź() {

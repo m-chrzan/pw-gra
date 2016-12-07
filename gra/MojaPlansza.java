@@ -27,6 +27,7 @@ public class MojaPlansza implements Plansza {
     }
 
     public void usuń(Postać postać) {
+        plansza.usuń(postać);
     }
 
     public void sprawdź(int wiersz, int kolumna,
