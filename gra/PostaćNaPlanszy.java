@@ -28,8 +28,7 @@ public class PostaćNaPlanszy {
      * chciana przez [this]?
      */
     public boolean blokujeszMnie(PostaćNaPlanszy postać) {
-        if (chcianaPozycja.equals(Pozycja.dajPozycjęZaPlanszą()) ||
-            postać.pozycja.equals(Pozycja.dajPozycjęZaPlanszą())) {
+        if (!chcianaPozycja.naPlanszy() || !postać.pozycja.naPlanszy()) {
             return false;
         } else {
             return this.chcianyPrawyDolny().wiersz() >= postać.lewyGórny().wiersz() &&
