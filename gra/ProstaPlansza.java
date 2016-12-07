@@ -20,9 +20,11 @@ public class ProstaPlansza {
     public void chęćPostawienia(Postać postać, int wiersz, int kolumna) {
         PostaćNaPlanszy postaćNaPlanszy = new PostaćNaPlanszy(postać);
         postaćNaPlanszy.chcianaPozycja(new Pozycja(wiersz, kolumna));
+
         if (!zmieściSięNaPlanszy(postaćNaPlanszy)) {
             throw new IllegalArgumentException();
         }
+
         postacie.add(postaćNaPlanszy);
     }
 
@@ -57,7 +59,8 @@ public class ProstaPlansza {
         }
     }
 
-    private PostaćNaPlanszy znajdźPostać(Postać postać) throws NieZnalezionoPostaci {
+    private PostaćNaPlanszy znajdźPostać(Postać postać)
+        throws NieZnalezionoPostaci {
         for (PostaćNaPlanszy postaćNaPlanszy : postacie) {
             if (postaćNaPlanszy.dajPostać().equals(postać)) {
                 return postaćNaPlanszy;
@@ -80,17 +83,21 @@ public class ProstaPlansza {
     public boolean jestBlokowany(Postać postać) {
         try {
             PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
-            for (PostaćNaPlanszy innaPostać : postacie) {
-                if (!postaćNaPlanszy.equals(innaPostać) &&
-                    postaćNaPlanszy.blokujeszMnie(innaPostać)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return istniejePostaćKtóraBlokuje(postaćNaPlanszy);
         } catch (NieZnalezionoPostaci np) {
             return false;
         }
+    }
+
+    private boolean istniejePostaćKtóraBlokuje(PostaćNaPlanszy postać) {
+        for (PostaćNaPlanszy innaPostać : postacie) {
+            if (!postać.equals(innaPostać) &&
+                postać.blokujeszMnie(innaPostać)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean tworzyCykl(Postać postać) {
@@ -112,10 +119,10 @@ public class ProstaPlansza {
         }
 
         dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, źródło);
-        return jestCyklDoŹródła(stos, odwiedzone, źródło);
+        return jestCyklDoŹródłaDfs(stos, odwiedzone, źródło);
     }
 
-    private boolean jestCyklDoŹródła(Stack<PostaćNaPlanszy> stos,
+    private boolean jestCyklDoŹródłaDfs(Stack<PostaćNaPlanszy> stos,
             Map<PostaćNaPlanszy, Boolean> odwiedzone,
             PostaćNaPlanszy źródło) {
         if (stos.empty()) {
@@ -129,7 +136,7 @@ public class ProstaPlansza {
             return true;
         } else {
             dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, aktualny);
-            return jestCyklDoŹródła(stos, odwiedzone, źródło);
+            return jestCyklDoŹródłaDfs(stos, odwiedzone, źródło);
         }
     }
 
