@@ -119,10 +119,10 @@ public class ProstaPlansza {
         }
 
         dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, źródło);
-        return jestCyklDoŹródła(stos, odwiedzone, źródło);
+        return jestCyklDoŹródłaDfs(stos, odwiedzone, źródło);
     }
 
-    private boolean jestCyklDoŹródła(Stack<PostaćNaPlanszy> stos,
+    private boolean jestCyklDoŹródłaDfs(Stack<PostaćNaPlanszy> stos,
             Map<PostaćNaPlanszy, Boolean> odwiedzone,
             PostaćNaPlanszy źródło) {
         if (stos.empty()) {
@@ -136,7 +136,7 @@ public class ProstaPlansza {
             return true;
         } else {
             dodajNieodwiedzonychSąsiadówNaStos(stos, odwiedzone, aktualny);
-            return jestCyklDoŹródła(stos, odwiedzone, źródło);
+            return jestCyklDoŹródłaDfs(stos, odwiedzone, źródło);
         }
     }
 
