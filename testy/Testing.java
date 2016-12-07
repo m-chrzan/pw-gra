@@ -51,4 +51,16 @@ public class Testing {
 
         Testing.checkTrue(thrown, msg);
     }
+
+    public static void checkNoExceptionThrown(Runnable runnable,
+            String msg) {
+        boolean thrown = false;
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            thrown = true;
+        }
+
+        checkFalse(thrown, msg);
+    }
 }
