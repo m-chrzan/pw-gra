@@ -11,19 +11,32 @@ public class MojaPlansza implements Plansza {
             throws InterruptedException {
         plansza.chęćPostawienia(postać, wiersz, kolumna);
 
-        czekajAżMożnaPostawić(postać);
+        czekajAżNieblokowany(postać);
 
         plansza.przesuńNaChcianąPozycję(postać);
     }
 
-    private void czekajAżMożnaPostawić(Postać postać) throws InterruptedException {
+    private void czekajAżNieblokowany(Postać postać) throws InterruptedException {
         while (plansza.jestBlokowany(postać)) {
             wait();
         }
     }
 
-    public void przesuń(Postać postać, Kierunek kierunek)
+    synchronized public void przesuń(Postać postać, Kierunek kierunek)
             throws InterruptedException, DeadlockException {
+        plansza.chęćPrzesunięcia(postać, kierunek);
+
+        rzućJeśliDeadlock(postać);
+
+        czekajAżNieblokowany(postać);
+
+        plansza.przesuńNaChcianąPozycję(postać);
+    }
+
+    private void rzućJeśliDeadlock(Postać postać) throws DeadlockException {
+        if (plansza.tworzyCykl(postać)) {
+            throw new DeadlockException();
+        }
     }
 
     public void usuń(Postać postać) {

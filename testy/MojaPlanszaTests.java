@@ -3,6 +3,8 @@ package testy;
 import gra.MojaPlansza;
 import gra.Plansza;
 import gra.Postać;
+import gra.Kierunek;
+import gra.DeadlockException;
 import sample.ProstaPostać;
 import sample.Finder;
 import sample.SpecificFinder;
@@ -151,6 +153,120 @@ public class MojaPlanszaTests {
 
     public static void testPrzesuń() {
         beginTest("przesuń");
+
+        Plansza plansza = new MojaPlansza(5, 6);
+
+        Postać postać1 = new ProstaPostać(2, 2);
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                try {
+                    plansza.przesuń(postać1, Kierunek.DÓŁ);
+                } catch (InterruptedException ie) {
+                } catch (DeadlockException de) {
+                }
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać that's not on board");
+
+
+        try {
+            plansza.postaw(postać1, 0, 0);
+        } catch (Exception e) {
+        }
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                try {
+                    plansza.przesuń(postać1, Kierunek.LEWO);
+                } catch (InterruptedException ie) {
+                } catch (DeadlockException de) {
+                }
+            }
+        }, new IllegalArgumentException(),
+        "Can't move Postać off the board");
+
+        try {
+            plansza.przesuń(postać1, Kierunek.PRAWO);
+        } catch (Exception e) {
+        }
+
+
+        checkIsSpecificPostać(plansza, postać1, 0, 1, 2, 2, "Postać moved right");
+        checkEmpty(plansza, 0, 0, 2, 0,
+                "Area previously occupied by Postać empty");
+
+        MojaPlansza plansza2 = new MojaPlansza(5, 6);
+
+        Postać[] postacie = new Postać[4];
+        Thread[] przesunięcia  = new Thread[3];
+
+        for (int i = 0; i < 4; i++) {
+            postacie[i] = new ProstaPostać(1, 1);
+        }
+
+        try {
+            plansza2.postaw(postacie[0], 0, 0);
+            plansza2.postaw(postacie[1], 1, 0);
+            plansza2.postaw(postacie[2], 0, 1);
+            plansza2.postaw(postacie[3], 1, 1);
+        } catch (Exception e) {
+        }
+
+        przesunięcia[0] = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    plansza2.przesuń(postacie[0], Kierunek.PRAWO);
+                } catch (Exception e) {
+                }
+            }
+        });
+        przesunięcia[1] = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    plansza2.przesuń(postacie[1], Kierunek.GÓRA);
+                } catch (Exception e) {
+                }
+            }
+        });
+        przesunięcia[2] = new Thread(new Runnable() {
+            public void run() {
+                try {
+                    plansza2.przesuń(postacie[2], Kierunek.DÓŁ);
+                } catch (Exception e) {
+                }
+            }
+        });
+
+        for (Thread przesunięcie : przesunięcia) {
+            przesunięcie.setDaemon(true);
+            przesunięcie.start();
+        }
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza2, postacie[0], 0, 0, 1, 1,
+                "First postać hasn't moved yet");
+        checkIsSpecificPostać(plansza2, postacie[1], 1, 0, 1, 1,
+                "Second postać hasn't moved yet");
+        checkIsSpecificPostać(plansza2, postacie[2], 0, 1, 1, 1,
+                "Third postać hasn't moved yet");
+        checkIsSpecificPostać(plansza2, postacie[3], 1, 1, 1, 1,
+                "Fourth postać hasn't moved yet");
+
+        Testing.checkExceptionThrown(new Runnable() {
+            public void run() {
+                try {
+                    plansza2.przesuń(postacie[3], Kierunek.LEWO);
+                } catch (DeadlockException e) {
+                    throw new ExceptionThrownException();
+                } catch (InterruptedException ie) {
+                }
+            }
+        }, new ExceptionThrownException(), "Move creates deadlock");
     }
 
     public static void testUsuń() {
@@ -186,14 +302,9 @@ public class MojaPlanszaTests {
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board empty (2/2)");
     }
 
-    public static void testSprawdź() {
-        beginTest("sprawdź");
-    }
-
     public static void main(String[] args) {
         testPostaw();
         testPrzesuń();
         testUsuń();
-        testSprawdź();
     }
 }

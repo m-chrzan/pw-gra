@@ -1,4 +1,5 @@
-TESTS=testy/PozycjaTests testy/PostaćNaPlanszyTests testy/ProstaPlanszaTests
+TESTS=testy/PozycjaTests testy/PostaćNaPlanszyTests testy/ProstaPlanszaTests \
+	  testy/MojaPlanszaTests
 
 all: $(TESTS:=.class)
 
