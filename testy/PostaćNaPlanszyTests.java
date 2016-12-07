@@ -46,7 +46,8 @@ public class PostaćNaPlanszyTests {
 
         PostaćNaPlanszy postać = new PostaćNaPlanszy(pp1);
 
-        Testing.checkEqual(postać.dajPostać(), pp1, "Correct Postać reference kept");
+        Testing.checkEqual(postać.dajPostać(), pp1,
+                "Correct Postać reference kept");
         Testing.checkNotEqual(postać.dajPostać(), pp2,
                "PostaćNaPlanszy object refers to a specific Postać object");
     }

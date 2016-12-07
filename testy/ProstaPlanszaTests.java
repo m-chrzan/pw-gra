@@ -188,7 +188,8 @@ public class ProstaPlanszaTests {
             public void run() {
                 plansza.chęćPrzesunięcia(postać1, Kierunek.GÓRA);
             }
-        }, new IllegalArgumentException(), "Can't move Postać up off the board");
+        }, new IllegalArgumentException(),
+        "Can't move Postać up off the board");
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
