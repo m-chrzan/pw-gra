@@ -39,11 +39,11 @@ public class MojaPlansza implements Plansza {
         }
     }
 
-    public void usuń(Postać postać) {
+    synchronized public void usuń(Postać postać) {
         plansza.usuń(postać);
     }
 
-    public void sprawdź(int wiersz, int kolumna,
+    synchronized public void sprawdź(int wiersz, int kolumna,
             Akcja jeśliZajęte, Runnable jeśliWolne) {
         plansza.sprawdź(wiersz, kolumna, jeśliZajęte, jeśliWolne);
     }
