@@ -83,17 +83,21 @@ public class ProstaPlansza {
     public boolean jestBlokowany(Postać postać) {
         try {
             PostaćNaPlanszy postaćNaPlanszy = znajdźPostać(postać);
-            for (PostaćNaPlanszy innaPostać : postacie) {
-                if (!postaćNaPlanszy.equals(innaPostać) &&
-                    postaćNaPlanszy.blokujeszMnie(innaPostać)) {
-                    return true;
-                }
-            }
-
-            return false;
+            return istniejePostaćKtóraBlokuje(postaćNaPlanszy);
         } catch (NieZnalezionoPostaci np) {
             return false;
         }
+    }
+
+    private boolean istniejePostaćKtóraBlokuje(PostaćNaPlanszy postać) {
+        for (PostaćNaPlanszy innaPostać : postacie) {
+            if (!postać.equals(innaPostać) &&
+                postać.blokujeszMnie(innaPostać)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean tworzyCykl(Postać postać) {
