@@ -20,9 +20,11 @@ public class ProstaPlansza {
     public void chęćPostawienia(Postać postać, int wiersz, int kolumna) {
         PostaćNaPlanszy postaćNaPlanszy = new PostaćNaPlanszy(postać);
         postaćNaPlanszy.chcianaPozycja(new Pozycja(wiersz, kolumna));
+
         if (!zmieściSięNaPlanszy(postaćNaPlanszy)) {
             throw new IllegalArgumentException();
         }
+
         postacie.add(postaćNaPlanszy);
     }
 
@@ -57,7 +59,8 @@ public class ProstaPlansza {
         }
     }
 
-    private PostaćNaPlanszy znajdźPostać(Postać postać) throws NieZnalezionoPostaci {
+    private PostaćNaPlanszy znajdźPostać(Postać postać)
+        throws NieZnalezionoPostaci {
         for (PostaćNaPlanszy postaćNaPlanszy : postacie) {
             if (postaćNaPlanszy.dajPostać().equals(postać)) {
                 return postaćNaPlanszy;

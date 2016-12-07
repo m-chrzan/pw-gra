@@ -16,7 +16,8 @@ public class MojaPlansza implements Plansza {
         plansza.przesuńNaChcianąPozycję(postać);
     }
 
-    private void czekajAżNieblokowany(Postać postać) throws InterruptedException {
+    private void czekajAżNieblokowany(Postać postać)
+        throws InterruptedException {
         while (plansza.jestBlokowany(postać)) {
             wait();
         }
