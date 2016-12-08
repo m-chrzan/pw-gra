@@ -19,24 +19,24 @@ public class MojaPlanszaTests {
         final Plansza plansza = new MojaPlansza(5, 6);
         checkEmpty(plansza, 0, 0, 5, 6, "MojaPlansza is empty at first");
 
-        final Postać postać0 = new ProstaPostać(6, 6);
+        final Postać tooBig = new ProstaPostać(6, 6);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza.postaw(postać0, 0, 0);
+                    plansza.postaw(tooBig, 0, 0);
                 } catch (InterruptedException ie) {
                 }
             }
         }, new IllegalArgumentException(),
         "Postać has to fit on the board");
 
-        final Postać postać1 = new ProstaPostać(2, 2);
+        final Postać offBoard = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza.postaw(postać1, -1, 0);
+                    plansza.postaw(offBoard, -1, 0);
                 } catch (InterruptedException ie) {
                 }
             }
@@ -46,56 +46,51 @@ public class MojaPlanszaTests {
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza.postaw(postać1, 4, 5);
+                    plansza.postaw(offBoard, 4, 5);
                 } catch (InterruptedException ie) {
                 }
             }
         }, new IllegalArgumentException(),
         "Postać has to fit on the board");
+
+        Postać placedCorrectly = new ProstaPostać(2, 2);
 
         try {
-            plansza.postaw(postać1, 0, 0);
+            plansza.postaw(placedCorrectly, 0, 0);
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+        checkIsSpecificPostać(plansza, placedCorrectly, 0, 0, 2, 2,
                 "Placed Postać correctly");
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board still empty (1/2)");
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board still empty (2/2)");
 
-        final Postać postać2 = new ProstaPostać(2, 2);
+        PostaćWątekZPostawieniem blocked =
+            new PostaćWątekZPostawieniem(2, 2, 0, 1, plansza);
 
-        Thread stawianie = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    plansza.postaw(postać2, 0, 1);
-                } catch (InterruptedException ie) {
-                }
-            }
-        });
-        stawianie.setDaemon(true);
-        stawianie.start();
+        blocked.setDaemon(true);
+        blocked.start();
 
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
 
-        Testing.checkEqual(stawianie.getState(), Thread.State.WAITING,
+        Testing.checkEqual(blocked.getState(), Thread.State.WAITING,
                 "Postać that doesn't fit is blocked");
-        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+        checkIsSpecificPostać(plansza, placedCorrectly, 0, 0, 2, 2,
                 "Original Postać still on board");
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board still empty (1/2)");
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board still empty (2/2)");
 
-        Postać postać3 = new ProstaPostać(2, 2);
+        Postać notBlocked = new ProstaPostać(2, 2);
         try {
-            plansza.postaw(postać3, 0, 2);
+            plansza.postaw(notBlocked, 0, 2);
         } catch (InterruptedException ie) {
         }
-        checkIsSpecificPostać(plansza, postać3, 0, 2, 2, 2,
+        checkIsSpecificPostać(plansza, notBlocked, 0, 2, 2, 2,
                 "New Postać placed on board");
-        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+        checkIsSpecificPostać(plansza, placedCorrectly, 0, 0, 2, 2,
                 "Original Postać still on board");
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board still empty (1/2)");
         checkEmpty(plansza, 0, 4, 2, 2, "Rest of board still empty (2/2)");
@@ -106,12 +101,12 @@ public class MojaPlanszaTests {
 
         final Plansza plansza = new MojaPlansza(5, 6);
 
-        final Postać postać1 = new ProstaPostać(2, 2);
+        final Postać offBoard = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza.przesuń(postać1, Kierunek.DÓŁ);
+                    plansza.przesuń(offBoard, Kierunek.DÓŁ);
                 } catch (InterruptedException ie) {
                 } catch (DeadlockException de) {
                 }
@@ -119,16 +114,17 @@ public class MojaPlanszaTests {
         }, new IllegalArgumentException(),
         "Can't move Postać that's not on board");
 
+        final Postać movingPostać = new ProstaPostać(2, 2);
 
         try {
-            plansza.postaw(postać1, 0, 0);
+            plansza.postaw(movingPostać, 0, 0);
         } catch (Exception e) {
         }
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza.przesuń(postać1, Kierunek.LEWO);
+                    plansza.przesuń(movingPostać, Kierunek.LEWO);
                 } catch (InterruptedException ie) {
                 } catch (DeadlockException de) {
                 }
@@ -137,29 +133,29 @@ public class MojaPlanszaTests {
         "Can't move Postać off the board");
 
         try {
-            plansza.przesuń(postać1, Kierunek.PRAWO);
+            plansza.przesuń(movingPostać, Kierunek.PRAWO);
         } catch (Exception e) {
         }
 
 
-        checkIsSpecificPostać(plansza, postać1, 0, 1, 2, 2, "Postać moved right");
+        checkIsSpecificPostać(plansza, movingPostać, 0, 1, 2, 2, "Postać moved right");
         checkEmpty(plansza, 0, 0, 2, 0,
                 "Area previously occupied by Postać empty");
 
         final MojaPlansza plansza2 = new MojaPlansza(5, 6);
 
-        final PostaćWątekZRuchem[] postacie = new PostaćWątekZRuchem[4];
+        final PostaćWątekZRuchem[] postacie = new PostaćWątekZRuchem[3];
 
         postacie[0] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.PRAWO);
         postacie[1] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.GÓRA);
         postacie[2] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.DÓŁ);
-        postacie[3] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.LEWO);
+        final Postać deadlocker = new ProstaPostać(1, 1);
 
         try {
             plansza2.postaw(postacie[0], 0, 0);
             plansza2.postaw(postacie[1], 1, 0);
             plansza2.postaw(postacie[2], 0, 1);
-            plansza2.postaw(postacie[3], 1, 1);
+            plansza2.postaw(deadlocker, 1, 1);
         } catch (Exception e) {
         }
 
@@ -182,7 +178,7 @@ public class MojaPlanszaTests {
                 "Second postać hasn't moved yet");
         checkIsSpecificPostać(plansza2, postacie[2], 0, 1, 1, 1,
                 "Third postać hasn't moved yet");
-        checkIsSpecificPostać(plansza2, postacie[3], 1, 1, 1, 1,
+        checkIsSpecificPostać(plansza2, deadlocker, 1, 1, 1, 1,
                 "Fourth postać hasn't moved yet");
 
         Testing.checkEqual(postacie[0].getState(), Thread.State.WAITING,
@@ -195,7 +191,7 @@ public class MojaPlanszaTests {
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
                 try {
-                    plansza2.przesuń(postacie[3], Kierunek.LEWO);
+                    plansza2.przesuń(deadlocker, Kierunek.LEWO);
                 } catch (InterruptedException ie) {
                 } catch (DeadlockException de) {
                     throw new DeadlockDetectedException();
@@ -204,55 +200,55 @@ public class MojaPlanszaTests {
         }, new DeadlockDetectedException(), "Move creates deadlock");
 
         Plansza plansza3 = new MojaPlansza(2, 3);
-        PostaćWątekZRuchem postać2 = new PostaćWątekZRuchem(1, 1, plansza3,
+        PostaćWątekZRuchem goingToMove = new PostaćWątekZRuchem(1, 1, plansza3,
                 Kierunek.PRAWO);
-        PostaćWątekZPostawieniem postać3 = new PostaćWątekZPostawieniem(1, 1, 0, 1,
-                plansza3);
-        PostaćWątekZRuchem postać4 = new PostaćWątekZRuchem(1, 1, plansza3,
-                Kierunek.GÓRA);
+        PostaćWątekZPostawieniem waitingWithPlaceForMove =
+            new PostaćWątekZPostawieniem(1, 1, 0, 1, plansza3);
+        PostaćWątekZRuchem waitingWithMoveForMove =
+            new PostaćWątekZRuchem(1, 1, plansza3, Kierunek.GÓRA);
 
         try {
-            plansza3.postaw(postać2, 0, 1);
+            plansza3.postaw(goingToMove, 0, 1);
             Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
 
-        postać3.start();
+        waitingWithPlaceForMove.start();
 
-        checkIsSpecificPostać(plansza3, postać2, 0, 1, 1, 1,
+        checkIsSpecificPostać(plansza3, goingToMove, 0, 1, 1, 1,
                 "Postać hasn't moved yet, other Postać blocked");
 
-        postać2.start();
+        goingToMove.start();
 
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza3, postać2, 0, 2, 1, 1,
+        checkIsSpecificPostać(plansza3, goingToMove, 0, 2, 1, 1,
                 "Postać has moved");
-        checkIsSpecificPostać(plansza3, postać3, 0, 1, 1, 1,
+        checkIsSpecificPostać(plansza3, waitingWithPlaceForMove, 0, 1, 1, 1,
                 "Postać placed in free spot");
 
         try {
-            plansza3.postaw(postać4, 1, 1);
+            plansza3.postaw(waitingWithMoveForMove, 1, 1);
         } catch (InterruptedException ie) {
         }
 
-        postać4.start();
+        waitingWithMoveForMove.start();
 
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza3, postać3, 0, 1, 1, 1,
+        checkIsSpecificPostać(plansza3, waitingWithPlaceForMove, 0, 1, 1, 1,
                 "Postać hasn't moved yet");
-        checkIsSpecificPostać(plansza3, postać4, 1, 1, 1, 1,
+        checkIsSpecificPostać(plansza3, waitingWithMoveForMove, 1, 1, 1, 1,
                 "Postać blocked");
 
         try {
-            plansza3.przesuń(postać3, Kierunek.LEWO);
+            plansza3.przesuń(waitingWithPlaceForMove, Kierunek.LEWO);
         } catch (Exception e) {
         }
 
@@ -261,9 +257,9 @@ public class MojaPlanszaTests {
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza3, postać3, 0, 0, 1, 1,
+        checkIsSpecificPostać(plansza3, waitingWithPlaceForMove, 0, 0, 1, 1,
                 "Postać has moved");
-        checkIsSpecificPostać(plansza3, postać4, 0, 1, 1, 1,
+        checkIsSpecificPostać(plansza3, waitingWithMoveForMove, 0, 1, 1, 1,
                 "Postać has moved into freed spot");
     }
 
@@ -271,41 +267,43 @@ public class MojaPlanszaTests {
         beginTest("usuń");
         final Plansza plansza = new MojaPlansza(5, 6);
 
-        final Postać postać1 = new ProstaPostać(2, 2);
-        Postać postać2 = new ProstaPostać(2, 2);
+        final Postać offBoard = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
-                plansza.usuń(postać1);
+                plansza.usuń(offBoard);
             }
         }, new IllegalArgumentException(),
         "Can't remove Postać that's not on board");
 
+        Postać toStay = new ProstaPostać(2, 2);
+        Postać toBeRemoved = new ProstaPostać(2, 2);
+
         try {
-            plansza.postaw(postać1, 0, 0);
-            plansza.postaw(postać2, 2, 0);
+            plansza.postaw(toStay, 0, 0);
+            plansza.postaw(toBeRemoved, 2, 0);
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+        checkIsSpecificPostać(plansza, toStay, 0, 0, 2, 2,
                 "First Postać is on board");
-        checkIsSpecificPostać(plansza, postać2, 2, 0, 2, 2,
+        checkIsSpecificPostać(plansza, toBeRemoved, 2, 0, 2, 2,
                 "Second Postać is on board");
 
-        plansza.usuń(postać2);
+        plansza.usuń(toBeRemoved);
 
-        checkIsSpecificPostać(plansza, postać1, 0, 0, 2, 2,
+        checkIsSpecificPostać(plansza, toStay, 0, 0, 2, 2,
                 "Original Postać still on board");
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board empty (1/2)");
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board empty (2/2)");
 
-        final Plansza plansza2 = new MojaPlansza(1, 1);
-        final Postać postać3 = new ProstaPostać(1, 1);
-        final PostaćWątekZPostawieniem postać4 =
+        Plansza plansza2 = new MojaPlansza(1, 1);
+        Postać placedImmediately = new ProstaPostać(1, 1);
+        PostaćWątekZPostawieniem waitingForRemoval =
             new PostaćWątekZPostawieniem(1, 1, 0, 0, plansza2);
 
         try {
-            plansza2.postaw(postać3, 0, 0);
+            plansza2.postaw(placedImmediately, 0, 0);
         } catch (InterruptedException ie) {
         }
 
@@ -314,19 +312,19 @@ public class MojaPlanszaTests {
         } catch (InterruptedException ie) {
         }
 
-        postać4.start();
+        waitingForRemoval.start();
 
-        checkIsSpecificPostać(plansza2, postać3, 0, 0, 1, 1,
+        checkIsSpecificPostać(plansza2, placedImmediately, 0, 0, 1, 1,
                 "New Postać not placed");
 
-        plansza2.usuń(postać3);
+        plansza2.usuń(placedImmediately);
 
         try {
             Thread.sleep(100);
         } catch (InterruptedException ie) {
         }
 
-        checkIsSpecificPostać(plansza2, postać4, 0, 0, 1, 1,
+        checkIsSpecificPostać(plansza2, waitingForRemoval, 0, 0, 1, 1,
                 "New Postać placed in freed spot");
     }
 
