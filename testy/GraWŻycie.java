@@ -54,6 +54,10 @@ public class GraWŻycie {
         }
     }
 
+    /*
+     * Wątki zatrzymują się na barierze dwa razy podczas cyklu, a plansze
+     * chcemy wypisywać tylko raz na cykl.
+     */
     private boolean barieraGotowa() {
         barieraGotowa = !barieraGotowa;
 
