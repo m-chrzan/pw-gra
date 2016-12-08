@@ -13,59 +13,6 @@ import sample.PostaćWątekZPostawieniem;
 import sample.DeadlockDetectedException;
 
 public class MojaPlanszaTests {
-    public static void beginTest(String name) {
-        Testing.beginTest("MojaPlansza." + name);
-    }
-
-    public static void checkEmpty(Plansza plansza, int row, int column,
-            int height, int width, String msg) {
-        boolean empty = true;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                Finder finder = new Finder();
-                plansza.sprawdź(row + i, column + j, finder, finder);
-                if (finder.foundPostać()) {
-                    empty = false;
-                }
-            }
-        }
-
-        Testing.checkTrue(empty, msg);
-    }
-
-    public static void checkFilled(Plansza plansza, int row, int column,
-            int height, int width, String msg) {
-        boolean filled = true;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                Finder finder = new Finder();
-                plansza.sprawdź(row + i, column + j, finder, finder);
-                if (!finder.foundPostać()) {
-                    filled = false;
-                }
-            }
-        }
-
-        Testing.checkTrue(filled, msg);
-    }
-
-    public static void checkIsSpecificPostać(Plansza plansza,
-            Postać postać, int row, int column, int height, int width,
-            String msg) {
-        boolean allSpecificPostać = true;
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                SpecificFinder finder = new SpecificFinder(postać);
-                plansza.sprawdź(row + i, column + j, finder, finder);
-                if (!finder.foundPostać()) {
-                    allSpecificPostać = false;
-                }
-            }
-        }
-
-        Testing.checkTrue(allSpecificPostać, msg);
-    }
-
     public static void testPostaw() {
         beginTest("postaw");
 
@@ -387,5 +334,58 @@ public class MojaPlanszaTests {
         testPostaw();
         testPrzesuń();
         testUsuń();
+    }
+
+    public static void beginTest(String name) {
+        Testing.beginTest("MojaPlansza." + name);
+    }
+
+    public static void checkEmpty(Plansza plansza, int row, int column,
+            int height, int width, String msg) {
+        boolean empty = true;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Finder finder = new Finder();
+                plansza.sprawdź(row + i, column + j, finder, finder);
+                if (finder.foundPostać()) {
+                    empty = false;
+                }
+            }
+        }
+
+        Testing.checkTrue(empty, msg);
+    }
+
+    public static void checkFilled(Plansza plansza, int row, int column,
+            int height, int width, String msg) {
+        boolean filled = true;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                Finder finder = new Finder();
+                plansza.sprawdź(row + i, column + j, finder, finder);
+                if (!finder.foundPostać()) {
+                    filled = false;
+                }
+            }
+        }
+
+        Testing.checkTrue(filled, msg);
+    }
+
+    public static void checkIsSpecificPostać(Plansza plansza,
+            Postać postać, int row, int column, int height, int width,
+            String msg) {
+        boolean allSpecificPostać = true;
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                SpecificFinder finder = new SpecificFinder(postać);
+                plansza.sprawdź(row + i, column + j, finder, finder);
+                if (!finder.foundPostać()) {
+                    allSpecificPostać = false;
+                }
+            }
+        }
+
+        Testing.checkTrue(allSpecificPostać, msg);
     }
 }
