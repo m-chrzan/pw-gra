@@ -8,6 +8,8 @@ import gra.DeadlockException;
 import sample.ProstaPostać;
 import sample.Finder;
 import sample.SpecificFinder;
+import sample.PostaćWątekZRuchem;
+import sample.DeadlockDetectedException;
 
 public class MojaPlanszaTests {
     public static void beginTest(String name) {
@@ -198,12 +200,12 @@ public class MojaPlanszaTests {
 
         MojaPlansza plansza2 = new MojaPlansza(5, 6);
 
-        Postać[] postacie = new Postać[4];
-        Thread[] przesunięcia  = new Thread[3];
+        PostaćWątekZRuchem[] postacie = new PostaćWątekZRuchem[4];
 
-        for (int i = 0; i < 4; i++) {
-            postacie[i] = new ProstaPostać(1, 1);
-        }
+        postacie[0] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.PRAWO);
+        postacie[1] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.GÓRA);
+        postacie[2] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.DÓŁ);
+        postacie[3] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.LEWO);
 
         try {
             plansza2.postaw(postacie[0], 0, 0);
@@ -213,35 +215,13 @@ public class MojaPlanszaTests {
         } catch (Exception e) {
         }
 
-        przesunięcia[0] = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    plansza2.przesuń(postacie[0], Kierunek.PRAWO);
-                } catch (Exception e) {
-                }
-            }
-        });
-        przesunięcia[1] = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    plansza2.przesuń(postacie[1], Kierunek.GÓRA);
-                } catch (Exception e) {
-                }
-            }
-        });
-        przesunięcia[2] = new Thread(new Runnable() {
-            public void run() {
-                try {
-                    plansza2.przesuń(postacie[2], Kierunek.DÓŁ);
-                } catch (Exception e) {
-                }
-            }
-        });
-
-        for (Thread przesunięcie : przesunięcia) {
-            przesunięcie.setDaemon(true);
-            przesunięcie.start();
+        for (Thread postać : postacie) {
+            postać.setDaemon(true);
         }
+
+        postacie[0].start();
+        postacie[1].start();
+        postacie[2].start();
 
         try {
             Thread.sleep(100);
@@ -256,6 +236,13 @@ public class MojaPlanszaTests {
                 "Third postać hasn't moved yet");
         checkIsSpecificPostać(plansza2, postacie[3], 1, 1, 1, 1,
                 "Fourth postać hasn't moved yet");
+
+        Testing.checkEqual(postacie[0].getState(), Thread.State.WAITING,
+                "Postać tried to move, now waiting");
+        Testing.checkEqual(postacie[1].getState(), Thread.State.WAITING,
+                "Postać tried to move, now waiting");
+        Testing.checkEqual(postacie[2].getState(), Thread.State.WAITING,
+                "Postać tried to move, now waiting");
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
