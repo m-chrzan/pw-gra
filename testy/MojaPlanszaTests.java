@@ -248,12 +248,12 @@ public class MojaPlanszaTests {
             public void run() {
                 try {
                     plansza2.przesuń(postacie[3], Kierunek.LEWO);
-                } catch (DeadlockException e) {
-                    throw new ExceptionThrownException();
                 } catch (InterruptedException ie) {
+                } catch (DeadlockException de) {
+                    throw new DeadlockDetectedException();
                 }
             }
-        }, new ExceptionThrownException(), "Move creates deadlock");
+        }, new DeadlockDetectedException(), "Move creates deadlock");
     }
 
     public static void testUsuń() {
