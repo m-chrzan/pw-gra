@@ -1,7 +1,9 @@
 TESTS=testy/PozycjaTests testy/PostaćNaPlanszyTests testy/ProstaPlanszaTests \
 	  testy/MojaPlanszaTests
 
-all: $(TESTS:=.class)
+all: $(TESTS:=.class) life
+
+life: testy/GraWŻycie.class
 
 %.class:
 	javac $(@:.class=.java)
@@ -9,7 +11,7 @@ all: $(TESTS:=.class)
 
 .PHONY: run_tests clean
 
-run_tests: all
+run_tests: $(TESTS:=.class)
 	$(foreach test, $(TESTS), java $(test);)
 
 clean:
