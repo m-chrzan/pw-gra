@@ -68,10 +68,10 @@ public class MojaPlanszaTests {
     public static void testPostaw() {
         beginTest("postaw");
 
-        Plansza plansza = new MojaPlansza(5, 6);
+        final Plansza plansza = new MojaPlansza(5, 6);
         checkEmpty(plansza, 0, 0, 5, 6, "MojaPlansza is empty at first");
 
-        Postać postać0 = new ProstaPostać(6, 6);
+        final Postać postać0 = new ProstaPostać(6, 6);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
@@ -83,7 +83,7 @@ public class MojaPlanszaTests {
         }, new IllegalArgumentException(),
         "Postać has to fit on the board");
 
-        Postać postać1 = new ProstaPostać(2, 2);
+        final Postać postać1 = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
@@ -115,7 +115,7 @@ public class MojaPlanszaTests {
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board still empty (1/2)");
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board still empty (2/2)");
 
-        Postać postać2 = new ProstaPostać(2, 2);
+        final Postać postać2 = new ProstaPostać(2, 2);
 
         Thread stawianie = new Thread(new Runnable() {
             public void run() {
@@ -156,9 +156,9 @@ public class MojaPlanszaTests {
     public static void testPrzesuń() {
         beginTest("przesuń");
 
-        Plansza plansza = new MojaPlansza(5, 6);
+        final Plansza plansza = new MojaPlansza(5, 6);
 
-        Postać postać1 = new ProstaPostać(2, 2);
+        final Postać postać1 = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
             public void run() {
@@ -198,9 +198,9 @@ public class MojaPlanszaTests {
         checkEmpty(plansza, 0, 0, 2, 0,
                 "Area previously occupied by Postać empty");
 
-        MojaPlansza plansza2 = new MojaPlansza(5, 6);
+        final MojaPlansza plansza2 = new MojaPlansza(5, 6);
 
-        PostaćWątekZRuchem[] postacie = new PostaćWątekZRuchem[4];
+        final PostaćWątekZRuchem[] postacie = new PostaćWątekZRuchem[4];
 
         postacie[0] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.PRAWO);
         postacie[1] = new PostaćWątekZRuchem(1, 1, plansza2, Kierunek.GÓRA);
@@ -258,9 +258,9 @@ public class MojaPlanszaTests {
 
     public static void testUsuń() {
         beginTest("usuń");
-        Plansza plansza = new MojaPlansza(5, 6);
+        final Plansza plansza = new MojaPlansza(5, 6);
 
-        Postać postać1 = new ProstaPostać(2, 2);
+        final Postać postać1 = new ProstaPostać(2, 2);
         Postać postać2 = new ProstaPostać(2, 2);
 
         Testing.checkExceptionThrown(new Runnable() {
