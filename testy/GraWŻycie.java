@@ -7,14 +7,14 @@ import sample.KontrolerKomórki;
 import sample.Finder;
 
 public class GraWŻycie {
-    private int wysokość;
-    private int szerokość;
+    private final int wysokość;
+    private final int szerokość;
     private KontrolerKomórki[][] komórki;
     private Plansza plansza;
     private CyclicBarrier bariera;
     private boolean barieraGotowa = true;
 
-    public GraWŻycie(int wysokość, int szerokość, boolean[][] stany) {
+    public GraWŻycie(final int wysokość, final int szerokość, boolean[][] stany) {
         this.wysokość = wysokość;
         this.szerokość = szerokość;
         komórki = new KontrolerKomórki[wysokość + 2][szerokość + 2];

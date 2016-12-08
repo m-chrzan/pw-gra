@@ -65,7 +65,7 @@ public class ProstaPlanszaTests {
     public static void testChęćPostawienia() {
         beginTest("chęćPostawienia");
 
-        ProstaPlansza plansza = new ProstaPlansza(5, 5);
+        final ProstaPlansza plansza = new ProstaPlansza(5, 5);
 
         checkEmpty(plansza, 0, 0, 5, 5, "ProstaPlansza is empty at first");
 
@@ -155,8 +155,8 @@ public class ProstaPlanszaTests {
     public static void testChęćPrzesunięcia() {
         beginTest("chęćPrzesunięcia");
 
-        ProstaPlansza plansza = new ProstaPlansza(5, 5);
-        ProstaPostać postać1 = new ProstaPostać(2, 2);
+        final ProstaPlansza plansza = new ProstaPlansza(5, 5);
+        final ProstaPostać postać1 = new ProstaPostać(2, 2);
 
         plansza.chęćPostawienia(postać1, 1, 1);
         plansza.przesuńNaChcianąPozycję(postać1);
@@ -198,7 +198,7 @@ public class ProstaPlanszaTests {
         }, new IllegalArgumentException(),
         "Can't move Postać left off the board");
 
-        ProstaPostać postać2 = new ProstaPostać(2, 2);
+        final ProstaPostać postać2 = new ProstaPostać(2, 2);
         plansza.chęćPostawienia(postać2, 3, 3);
         plansza.przesuńNaChcianąPozycję(postać2);
 
@@ -340,9 +340,9 @@ public class ProstaPlanszaTests {
     public static void testUsuń() {
         beginTest("usuń");
 
-        ProstaPlansza plansza = new ProstaPlansza(5, 6);
+        final ProstaPlansza plansza = new ProstaPlansza(5, 6);
 
-        Postać postać1 = new ProstaPostać(2, 3);
+        final Postać postać1 = new ProstaPostać(2, 3);
         Postać postać2 = new ProstaPostać(2, 1);
 
         Testing.checkExceptionThrown(new Runnable() {
