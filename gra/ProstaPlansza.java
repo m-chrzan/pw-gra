@@ -70,7 +70,8 @@ public class ProstaPlansza {
         throw new NieZnalezionoPostaci();
     }
 
-    private PostaćNaPlanszy znajdźPostać(Pozycja pozycja) throws NieZnalezionoPostaci {
+    private PostaćNaPlanszy znajdźPostać(Pozycja pozycja)
+        throws NieZnalezionoPostaci {
         for (PostaćNaPlanszy postaćNaPlanszy : postacie) {
             if (postaćNaPlanszy.zawiera(pozycja)) {
                 return postaćNaPlanszy;
