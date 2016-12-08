@@ -32,6 +32,8 @@ public class MojaPlansza implements Plansza {
         czekajAżNieblokowany(postać);
 
         plansza.przesuńNaChcianąPozycję(postać);
+
+        notifyAll();
     }
 
     private void rzućJeśliDeadlock(Postać postać) throws DeadlockException {

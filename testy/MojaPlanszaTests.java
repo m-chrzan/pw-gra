@@ -255,6 +255,69 @@ public class MojaPlanszaTests {
                 }
             }
         }, new DeadlockDetectedException(), "Move creates deadlock");
+
+        Plansza plansza3 = new MojaPlansza(2, 3);
+        PostaćWątekZRuchem postać2 = new PostaćWątekZRuchem(1, 1, plansza3,
+                Kierunek.PRAWO);
+        PostaćWątekZPostawieniem postać3 = new PostaćWątekZPostawieniem(1, 1, 0, 1,
+                plansza3);
+        PostaćWątekZRuchem postać4 = new PostaćWątekZRuchem(1, 1, plansza3,
+                Kierunek.GÓRA);
+
+        try {
+            plansza3.postaw(postać2, 0, 1);
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        postać3.start();
+
+        checkIsSpecificPostać(plansza3, postać2, 0, 1, 1, 1,
+                "Postać hasn't moved yet, other Postać blocked");
+
+        postać2.start();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza3, postać2, 0, 2, 1, 1,
+                "Postać has moved");
+        checkIsSpecificPostać(plansza3, postać3, 0, 1, 1, 1,
+                "Postać placed in free spot");
+
+        try {
+            plansza3.postaw(postać4, 1, 1);
+        } catch (InterruptedException ie) {
+        }
+
+        postać4.start();
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza3, postać3, 0, 1, 1, 1,
+                "Postać hasn't moved yet");
+        checkIsSpecificPostać(plansza3, postać4, 1, 1, 1, 1,
+                "Postać blocked");
+
+        try {
+            plansza3.przesuń(postać3, Kierunek.LEWO);
+        } catch (Exception e) {
+        }
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza3, postać3, 0, 0, 1, 1,
+                "Postać has moved");
+        checkIsSpecificPostać(plansza3, postać4, 0, 1, 1, 1,
+                "Postać has moved into freed spot");
     }
 
     public static void testUsuń() {
