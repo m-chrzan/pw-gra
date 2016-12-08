@@ -9,6 +9,7 @@ import sample.ProstaPostać;
 import sample.Finder;
 import sample.SpecificFinder;
 import sample.PostaćWątekZRuchem;
+import sample.PostaćWątekZPostawieniem;
 import sample.DeadlockDetectedException;
 
 public class MojaPlanszaTests {
@@ -287,6 +288,36 @@ public class MojaPlanszaTests {
                 "Original Postać still on board");
         checkEmpty(plansza, 2, 0, 3, 6, "Rest of board empty (1/2)");
         checkEmpty(plansza, 0, 2, 2, 4, "Rest of board empty (2/2)");
+
+        final Plansza plansza2 = new MojaPlansza(1, 1);
+        final Postać postać3 = new ProstaPostać(1, 1);
+        final PostaćWątekZPostawieniem postać4 =
+            new PostaćWątekZPostawieniem(1, 1, 0, 0, plansza2);
+
+        try {
+            plansza2.postaw(postać3, 0, 0);
+        } catch (InterruptedException ie) {
+        }
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        postać4.start();
+
+        checkIsSpecificPostać(plansza2, postać3, 0, 0, 1, 1,
+                "New Postać not placed");
+
+        plansza2.usuń(postać3);
+
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException ie) {
+        }
+
+        checkIsSpecificPostać(plansza2, postać4, 0, 0, 1, 1,
+                "New Postać placed in freed spot");
     }
 
     public static void main(String[] args) {
