@@ -8,6 +8,7 @@ the board.
 ## Testing
 
 Unit tests for each helper object are found in `testy/<object name>Tests.java`.
+You can run all of them with `make run_tests`.
 
-Extended functional tests of the full `MojaPlansza` implementation can be found
-in `testy/Testy.java`.
+`testy/GraWŻycie` shows an implementation of Conway's Game of Life using
+`Plansza` and `Postać` objects.
