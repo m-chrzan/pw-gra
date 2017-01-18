@@ -43,10 +43,14 @@ public class PostaćNaPlanszy {
     }
 
     public boolean zawiera(Pozycja pozycja) {
-        return pozycja.wiersz() >= lewyGórny().wiersz() &&
-               pozycja.wiersz() <= prawyDolny().wiersz() &&
-               pozycja.kolumna() >= lewyGórny().kolumna() &&
-               pozycja.kolumna() <= prawyDolny().kolumna();
+        if (!lewyGórny().naPlanszy()) {
+            return false;
+        } else {
+            return pozycja.wiersz() >= lewyGórny().wiersz() &&
+                   pozycja.wiersz() <= prawyDolny().wiersz() &&
+                   pozycja.kolumna() >= lewyGórny().kolumna() &&
+                   pozycja.kolumna() <= prawyDolny().kolumna();
+        }
     }
 
     public Pozycja lewyGórny() {
